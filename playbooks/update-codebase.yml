@@ -1,0 +1,37 @@
+---
+- name: Update Codebase
+  hosts: upms_app
+  vars_prompt:
+    - name: ansible_password
+      prompt: "Enter SSH password"
+      private: true
+    - name: git_username
+      prompt: "Enter Git Username"
+      private: false
+    - name: git_password
+      prompt: "Enter Git Password or Personal Access Token"
+      private: true
+  vars:
+    app_user: "www-data"
+    app_user_home: "/var/www"
+    project_root: "/var/www/upms"
+    repo_url: "https://{{ git_username | urlencode }}:{{ git_password | urlencode }}@github.com/snbhattacharjya/upms.git"
+
+  become: true
+  tasks:
+    - name: Fetch and Pull latest code from Git
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ project_root }}"
+        update: yes
+        force: yes
+      become_user: "{{ app_user }}"
+
+    - name: Install/Update Composer Dependencies
+      ansible.builtin.shell: "php artisan optimize:clear; php artisan optimize; composer dumpautoload; php artisan octane:reload || true"
+      args:
+        chdir: "{{ project_root }}"
+      environment:
+        PATH: "/usr/local/bin:/usr/bin:/bin"
+      become_user: "{{ app_user }}"
+      ignore_errors: true

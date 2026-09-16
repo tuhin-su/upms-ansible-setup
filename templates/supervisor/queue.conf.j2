@@ -1,0 +1,10 @@
+[program:upms-queue]
+process_name=%(program_name)s_%(process_num)02d
+command=/usr/bin/php {{ project_root }}/artisan queue:work --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user={{ app_user }}
+numprocs=2
+redirect_stderr=true
+stdout_logfile={{ project_root }}/storage/logs/queue.log
+stopwaitsecs=3600

@@ -1,0 +1,9 @@
+[program:upms-octane]
+process_name=%(program_name)s
+command=/usr/bin/php {{ project_root }}/artisan octane:start --server=swoole --host=127.0.0.1 --port=8000 --workers=4 --task-workers=4 --max-requests=500
+autostart=true
+autorestart=true
+user={{ app_user }}
+redirect_stderr=true
+stdout_logfile={{ project_root }}/storage/logs/octane.log
+stopwaitsecs=3600

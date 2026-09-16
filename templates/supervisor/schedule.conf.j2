@@ -1,0 +1,9 @@
+[program:upms-schedule]
+process_name=%(program_name)s
+command=/usr/bin/php {{ project_root }}/artisan schedule:work
+autostart=true
+autorestart=true
+user={{ app_user }}
+redirect_stderr=true
+stdout_logfile={{ project_root }}/storage/logs/schedule.log
+stopwaitsecs=3600
