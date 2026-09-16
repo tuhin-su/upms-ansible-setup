@@ -111,7 +111,7 @@
 
     - name: RHEL/Fedora | Install PHP, Nginx and extensions
       ansible.builtin.package:
-        name: [nginx, php, php-cli, php-swoole, supervisor, php-common, php-bcmath, php-bz2, php-curl, php-gd, php-intl, php-mbstring, php-mysqlnd, php-opcache, php-pgsql, php-pecl-redis, php-pecl-imagick, php-soap, php-pdo, php-xml, php-zip, unzip, git]
+        name: [nginx, php, php-cli, php-swoole, supervisor, php-common, php-bcmath, php-bz2, php-curl, php-gd, php-intl, php-mbstring, php-mysqlnd, php-opcache, php-pgsql, php-pecl-redis, php-pecl-imagick, php-soap, php-pdo, php-process, php-xml, php-zip, unzip, git]
         state: latest
       when: ansible_facts['os_family'] == "RedHat"
 
