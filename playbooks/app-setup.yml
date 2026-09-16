@@ -255,6 +255,7 @@
         - ../templates/supervisor/queue.conf.j2
         - ../templates/supervisor/schedule.conf.j2
       when: ansible_facts['os_family'] == "Debian"
+      notify: Reload Supervisor
 
     - name: Copy Supervisor templates (RedHat)
       ansible.builtin.template:
@@ -265,11 +266,8 @@
         - ../templates/supervisor/queue.conf.j2
         - ../templates/supervisor/schedule.conf.j2
       when: ansible_facts['os_family'] == "RedHat"
+      notify: Reload Supervisor
 
-    - name: Update Supervisor config
-      ansible.builtin.command: supervisorctl update
-      changed_when: false
-
-    - name: Restart Supervisor processes
-      ansible.builtin.command: supervisorctl restart all
-      changed_when: false
+  handlers:
+    - name: Reload Supervisor
+      ansible.builtin.shell: supervisorctl reread && supervisorctl update && supervisorctl restart all
